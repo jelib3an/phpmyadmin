@@ -1,0 +1,13 @@
+{% trans 'Current server:' %}<br>
+
+<ul id="list_server">
+{% for server in servers %}
+    <li>
+    {% if server.selected %}
+        <strong>{{ server.label }}</strong>
+    {% else %}
+        <a class="disableAjax item" href="">{{ server.label }}</a>
+    {% endif %}
+    </li>
+{% endfor %}
+</ul>
