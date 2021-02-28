@@ -94,7 +94,7 @@ class Navigation
             }
 
             if ($cfg['NavigationDisplayServers'] && count($cfg['Servers']) > 1) {
-                $serverSelect = Select::render(true, true);
+                $serverSelect = (new Select($this->template))->render(true, true);
             }
 
             if (! defined('PMA_DISABLE_NAVI_SETTINGS')) {
@@ -162,7 +162,7 @@ class Navigation
             . "'" . $this->dbi->escapeString($itemName) . "',"
             . "'" . $this->dbi->escapeString($itemType) . "',"
             . "'" . $this->dbi->escapeString($dbName) . "',"
-            . "'" . (! empty($tableName) ? $this->dbi->escapeString($tableName) : '' )
+            . "'" . (! empty($tableName) ? $this->dbi->escapeString($tableName) : '')
             . "')";
         $this->relation->queryAsControlUser($sqlQuery, false);
     }
@@ -193,7 +193,8 @@ class Navigation
             . " AND `item_name`='" . $this->dbi->escapeString($itemName) . "'"
             . " AND `item_type`='" . $this->dbi->escapeString($itemType) . "'"
             . " AND `db_name`='" . $this->dbi->escapeString($dbName) . "'"
-            . (! empty($tableName)
+            . (
+                ! empty($tableName)
                 ? " AND `table_name`='" . $this->dbi->escapeString($tableName) . "'"
                 : ''
             );

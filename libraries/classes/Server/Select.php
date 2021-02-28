@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Server;
 
+use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
 use function count;
@@ -20,6 +21,14 @@ use function strpos;
  */
 class Select
 {
+    /** @var Template */
+    protected $template;
+
+    public function __construct(Template $template)
+    {
+        $this->template = $template;
+    }
+
     /**
      * Renders the server selection in list or selectbox form, or option tags only
      *
@@ -28,7 +37,7 @@ class Select
      *
      * @return string
      */
-    public static function render($not_only_options, $omit_fieldset)
+    public function render($not_only_options, $omit_fieldset)
     {
         $retval = '';
 
@@ -63,6 +72,7 @@ class Select
             $retval .= '<ul id="list_server">';
         }
 
+        $servers = [];
         foreach ($GLOBALS['cfg']['Servers'] as $key => $server) {
             if (empty($server['host'])) {
                 continue;
@@ -84,7 +94,7 @@ class Select
             if (! empty($server['only_db'])) {
                 if (! is_array($server['only_db'])) {
                     $label .= ' - ' . $server['only_db'];
-                    // try to avoid displaying a too wide selector
+                // try to avoid displaying a too wide selector
                 } elseif (count($server['only_db']) < 4) {
                     $label .= ' - ' . implode(', ', $server['only_db']);
                 }
@@ -113,6 +123,11 @@ class Select
                     . ($selected ? ' selected="selected"' : '') . '>'
                     . htmlspecialchars($label) . '</option>' . "\n";
             }
+
+            $servers[] = [
+                'selected' => $selected,
+                'label' => $label,
+            ];
         }
 
         if ($not_only_options) {
@@ -125,6 +140,7 @@ class Select
             $retval .= '</ul>';
         }
 
+        //$retval .= $this->template->render('server/select/list', ['servers' => $servers]);
         return $retval;
     }
 }

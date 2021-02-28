@@ -188,7 +188,7 @@ class AuthenticationCookie extends AuthenticationPlugin
         $serversOptions = '';
         $hasServers = count($GLOBALS['cfg']['Servers']) > 1;
         if ($hasServers) {
-            $serversOptions = Select::render(false, false);
+            $serversOptions = (new Select($this->template))->render(false, false);
         }
 
         $_form_params = [];
